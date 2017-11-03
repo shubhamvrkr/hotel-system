@@ -1,0 +1,129 @@
+<link rel="stylesheet" href="assets/css/dashboard.css" id="theme-stylesheet">
+<div class="page home-page">
+      <!-- Main Navbar-->
+      <header class="header">
+        <nav class="navbar">
+          <!-- Search Box-->
+          <div class="search-box">
+            <button class="dismiss"><i class="icon-close"></i></button>
+            <form id="searchForm" action="#" role="search">
+              <input type="search" placeholder="What are you looking for..." class="form-control">
+            </form>
+          </div>
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+              <div class="navbar-header">
+                <!-- Navbar Brand --><a href="#!/dashboard#" class="navbar-brand">
+                  <div class="brand-text brand-big hidden-lg-down" ng-if="!toggle"><strong>HOTEL TAB SYSTEM</strong></div>
+                  <div class="brand-text brand-small" ng-if="toggle" style="display:block;"><strong>HTS</strong></div></a>
+                <!-- Toggle Button--><a id="toggle-btn" ng-click="toggle=!toggle" class="menu-btn active"><span></span><span></span><span></span></a>
+              </div>
+              <!-- Navbar Menu -->
+              <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+               
+                <!-- Notifications-->
+                <li class="nav-item dropdown"> <a id="notifications" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i class="fa fa-bell-o"></i><span class="badge bg-red">12</span></a>
+                  <ul aria-labelledby="notifications" class="dropdown-menu">
+                    <li><a rel="nofollow" href="#" class="dropdown-item"> 
+                        <div class="notification">
+                          <div class="notification-content"><i class="fa fa-envelope bg-green"></i>You have 6 new messages </div>
+                          <div class="notification-time"><small>4 minutes ago</small></div>
+                        </div></a></li>
+                    <li><a rel="nofollow" href="#" class="dropdown-item"> 
+                        <div class="notification">
+                          <div class="notification-content"><i class="fa fa-twitter bg-blue"></i>You have 2 followers</div>
+                          <div class="notification-time"><small>4 minutes ago</small></div>
+                        </div></a></li>
+                    <li><a rel="nofollow" href="#" class="dropdown-item"> 
+                        <div class="notification">
+                          <div class="notification-content"><i class="fa fa-upload bg-orange"></i>Server Rebooted</div>
+                          <div class="notification-time"><small>4 minutes ago</small></div>
+                        </div></a></li>
+                    <li><a rel="nofollow" href="#" class="dropdown-item"> 
+                        <div class="notification">
+                          <div class="notification-content"><i class="fa fa-twitter bg-blue"></i>You have 2 followers</div>
+                          <div class="notification-time"><small>10 minutes ago</small></div>
+                        </div></a></li>
+                    <li><a rel="nofollow" href="#" class="dropdown-item all-notifications text-center"> <strong>view all notifications                                            </strong></a></li>
+                  </ul>
+                </li>
+                <!-- Messages                        -->
+                <li class="nav-item dropdown"> <a id="messages" rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link"><i class="fa fa-envelope-o"></i><span class="badge bg-orange">10</span></a>
+                  <ul aria-labelledby="notifications" class="dropdown-menu">
+                    <li><a rel="nofollow" href="" class="dropdown-item d-flex"> 
+                        <div class="msg-profile"> <img src="img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div>
+                        <div class="msg-body">
+                          <h3 class="h5">Jason Doe</h3><span>Sent You Message</span>
+                        </div></a></li>
+                    <li><a rel="nofollow" href="" class="dropdown-item d-flex"> 
+                        <div class="msg-profile"> <img src="img/avatar-2.jpg" alt="..." class="img-fluid rounded-circle"></div>
+                        <div class="msg-body">
+                          <h3 class="h5">Frank Williams</h3><span>Sent You Message</span>
+                        </div></a></li>
+                    <li><a rel="nofollow" href="" class="dropdown-item d-flex"> 
+                        <div class="msg-profile"> <img src="img/avatar-3.jpg" alt="..." class="img-fluid rounded-circle"></div>
+                        <div class="msg-body">
+                          <h3 class="h5">Ashley Wood</h3><span>Sent You Message</span>
+                        </div></a></li>
+                    <li><a rel="nofollow" href="" class="dropdown-item all-notifications text-center"> <strong>Read all messages    </strong></a></li>
+                  </ul>
+                </li>
+                <!-- Logout    -->
+                <li class="nav-item"><a href="" ng-click="logout()" class="nav-link logout">Logout<i class="fa fa-sign-out"></i></a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <div class="page-content d-flex align-items-stretch">
+        <!-- Side Navbar -->
+        <nav class="side-navbar" ng-class="toggle?'shrinked':''">
+          <!-- Sidebar Header-->
+          <div class="sidebar-header d-flex align-items-center">
+            <div class="avatar"><img src="assets/img/default.png" alt="..." class="img-logo rounded-circle img-responsive">
+			</div>
+            <div class="title">
+              <h1 class="h4">{{user.firstname+' '+user.lastname}}</h1>
+              <p >{{user.role}}</p>
+            </div>
+          </div>
+          <!-- Sidebar Navidation Menus-->
+		 <div>
+			  <ul class="list-unstyled">
+				<span class="heading">Main</span>
+				<li ng-class="view.title=='Dashboard'?'active':''"> <a href="" ng-click="setView('home.html','Dashboard')"><i class="icon-home"></i>Dashboard</a></li>
+				
+				<span class="heading">Hotel Profile</span>
+				<li  ng-class="view.title=='Hotel Staff'?'active':''"><a href="" ng-click="setView('staff.html','Hotel Staff')"> <i class="icon-user"></i>Staff</a></li>
+				<li  ng-class="view.title=='Hotel Rooms'?'active':''"><a href="" ng-click="setView('room.html','Hotel Rooms');"> <i class="fa fa-bed"></i>Rooms</a></li>
+			
+				<span class="heading">Kitchen Profile</span>
+				<li ng-class="view.title=='eMenu'?'active':''"> <a href="" ng-click="setView('emenu.html','eMenu');"><i class="fa fa-cutlery"></i>eMenu </a></li>
+				<span class="heading">Places to visit</span>
+				<li ng-class="view.title=='Popular Places'?'active':''"> <a href="" ng-click="setView('pplaces.html','Popular Places');"><i class="icon-page"></i>Popular Places </a></li>
+			  </ul>
+		  <div>
+        </nav>
+        <div class="content-inner">
+          <!-- Page Header-->
+        
+		  <div class="views" ng-include="view.url"></div>
+			
+          <!-- Page Footer-->
+          <footer class="main-footer">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <p>Hotel Tab Systems &copy; 2017-2019</p>
+                </div>
+                <div class="col-sm-6 text-right">
+                  <p>Design by <a href="https://bootstrapious.com/admin-templates" class="external">Hotel Tab Systems</a></p>
+                  <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>

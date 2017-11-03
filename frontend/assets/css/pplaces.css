@@ -1,0 +1,21 @@
+/* your styles go here */
+.form-header-text{
+	
+	color:#696969;
+	font-weight: 600;
+	
+}
+.response-text{
+	
+	color:green;
+	margin-right:20px;
+	
+}
+.form-addstaff-button{
+	margin-top:25px;
+	margin-bottom:20px;
+}
+.modalclass{
+	z-index:10000;
+	position: absolute;
+}

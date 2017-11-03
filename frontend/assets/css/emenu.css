@@ -1,0 +1,48 @@
+/* your styles go here */
+.form-header-text{
+	
+	color:#696969;
+	font-weight: 600;
+	
+}
+.response-text{
+	
+	color:green;
+	margin-right:20px;
+	
+}
+.form-addstaff-button{
+	margin-top:25px;
+	margin-bottom:20px;
+}
+.modalclass{
+	z-index:10000;
+	position: absolute;
+}
+
+.food-item-img{
+	width:220px;
+	height:200px;
+	
+}
+.row-img{
+	
+	height:100%;
+	width:100%;
+	
+}
+.select-class{
+	
+	margin-top:10px;
+}
+.item_details{
+	color:#686a76;
+	padding:5px;
+	margin-right:8px;
+	min-width:100%;
+	font-size:1em;
+}
+.right-project{
+	width:90%;
+	height:100%;
+}
