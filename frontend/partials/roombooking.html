@@ -1,0 +1,235 @@
+<!-- Dashboard Counts Section-->
+<link rel="stylesheet" href="assets/css/roombooking.css" id="theme-stylesheet">
+<div ng-controller="roombookingController">
+
+	<header class="page-header">
+            <div class="container-fluid">
+              <h2 class="no-margin-bottom" style="float: left;">{{view.title}}</h2>
+			  <button type="button" ng-click="refresh()" style="float: right;" class=="btn btn-link"><i class="fa fa-refresh"></i></button>
+			  <div style="clear:both;"/>
+			</div>
+	</header>
+	<div class="tables form-addstaff-button"> 
+        <div class="container-fluid">
+            <div class="row">
+				<div class="col-lg-3">  
+					<button type="button" class="btn btn-warning btn-md" data-target="#registerGuest" aria-expanded="false" data-toggle="collapse"><i class="fa fa-plus"></i> Register/Book</button>
+				</div>
+			</div>
+		</div>
+	</div>
+  <div class="tables collapse" id="registerGuest"> 
+        <div class="container-fluid">
+            <div class="row">
+			   <div class="col-lg-12">                           
+                  <div class="card">
+					<div class="card-close">
+                      <div class="dropdown">
+						<small class="response-text">{{registerguest_response}}</small>
+						<button type="button" class="btn btn-success" ng-click="registerGuest(guest)"><i class="fa fa-check"></i> Submit</button>
+						<button type="button" ng-click="clear()" data-toggle="collapse" data-target="#addroom" class="btn btn-link btn-danger"><i class="fa fa-close"></i></button>
+                      </div>
+                    </div>
+                    <div class="card-header d-flex align-items-center">
+                      <label class="form-header-text">Please fill the details</label>
+                    </div>
+                    <div class="card-body" ng-click="clearResponse()">
+                      <form class="form-inline">
+                        <div class="form-group col-lg-4">
+                         <select style="margin-left:5px;"class="form-control select-class" id="placetype" ng-model="guest.roomno" ng-options="item.id as item.id for item in availablerooms | filter:checkAvalibility(guest.roomtype,guest.roomclass,guest.checkin,guest.checkout)">
+								<option value="" disabled>Room ID</option>
+						 </select>
+                        </div>
+					  </form>
+					   <div style="min-height:5px"/>
+					  <form class="form-inline">
+						   <div class="form-group col-lg-4">
+							  <input id="inlineFormInput" type="text" placeholder="Guest Name" class="mx-sm-6 form-control" ng-model="guest.name">
+							</div>
+							<div class="form-group col-lg-4">
+								<input id="inlineFormInput" type="text" placeholder="Email" class="mx-sm-6 form-control" ng-model="guest.email">
+							</div>
+							<div class="form-group col-lg-4">
+							  <input id="inlineFormInputGroup" type="number" placeholder="Contact" class="mx-sm-6 form-control form-control" ng-model="guest.contact">
+							</div>
+					  </form>
+					   <div style="min-height:5px"/>
+						<div class=" col-lg-12 form-group">
+								<textarea class="form-control" placeholder="Address here..." ng-model="guest.address" rows="2" id="address"></textarea>
+						</div>
+						<form class="form-inline">
+						   <div class="form-group col-lg-4">
+							  <input id="inlineFormInput" type="number" placeholder="No of adults" class="mx-sm-6 form-control" ng-model="guest.adults">
+							</div>
+							<div class="form-group col-lg-4">
+								<input id="inlineFormInput" type="number" placeholder="No of childrens" class="mx-sm-6 form-control" ng-model="guest.childrens">
+							</div>
+							<div class="form-group col-lg-4">
+							  <input id="inlineFormInputGroup" type="number" placeholder="No of nights" class="mx-sm-6 form-control form-control" ng-model="guest.nights">
+							</div>
+						</form>
+						<div style="min-height:5px"/>
+						<form class="form-inline">
+						   <div class="form-group col-lg-4">
+							
+							 <select class="col-lg-5 form-control select-class" id="placetype" ng-model="guest.roomclass" ng-options="item.class as item.class for item in availablerooms | unique:'class' | filter:checkAvalibility(guest.roomtype,guest.roomclass,guest.checkin,guest.checkout)">
+								<option value="" disabled>Class</option>
+							 </select>
+							  <select style="margin-left:5px;"class="col-lg-4 form-control select-class" id="placetype" ng-model="guest.roomtype" ng-options="item.type as item.type for item in availablerooms | unique:'type' | filter:checkAvalibility(guest.roomtype,guest.roomclass,guest.checkin,guest.checkout)">
+								<option value="" disabled>Type</option>
+							  </select>
+							
+							</div>
+							<div class="form-group col-lg-4">
+								<datepicker date-format="MMM d, y">
+									  <input class="mx-sm-6 form-control" ng-model="guest.checkin" placeholder=" Checkin date" type="text"/>
+								</datepicker>
+							</div>
+							<div class="form-group col-lg-4">
+								<datepicker date-format="MMM d, y">
+									  <input class="mx-sm-6 form-control" ng-model="guest.checkout" placeholder=" Checkout date" type="text"/>
+								</datepicker>
+							</div>
+						</form>
+                    </div>
+                  </div>
+                </div>
+			  
+			</div>  
+		</div>	  
+	</div>
+	
+  <div class="tables" ng-if="registeredGuests.length">  
+		<div class="container-fluid">
+			<div class="row">
+			
+			 <div class="col-lg-12">
+                  <div class="card">
+				    <div class="card-header d-flex align-items-center">
+                      <h4 class="form-header-text">Guest Registration Lists</h4>
+                    </div>
+                    <div class="card-body">
+					
+                       <div class="container-fluid" ng-repeat="(index,guestlist) in registeredGuests | groupBy: 'registration'">
+							<div class="row group-header"><div><b>Registration Date:</b> {{index | date:'MMMM d, y'}}</div> </div>
+							<div ng-repeat="(key,guest) in guestlist">
+								<div class="project">
+									<div class="row bg-white has-shadow">
+										  <div class="left-col col-lg-6 d-flex align-items-center justify-content-between">
+											<div class="project-title d-flex align-items-center">
+											  <div class="item_details list-font">
+												<div><strong>Room No:</strong> {{guest.roomno}} </div>
+												<div><strong>Booked by:</strong> {{guest.name}}</div>
+												<div><strong>Email:</strong> {{guest.email}}</div>
+												<div><strong>Contact:</strong> {{guest.contact}}</div>
+											  </div>
+											</div>
+											<div class="project-date">
+												<div class="item_details list-font">
+													<div><strong>No of Adults:</strong> {{guest.adults}} </div>
+													<div><strong>No of Childrens:</strong> {{guest.childrens}}</div>
+													<div><strong>No of Nights:</strong> {{guest.nights}}</div>
+												</div>
+												
+											</div>
+										  </div>
+										  <div class="right-col col-lg-6 d-flex align-items-center">
+											<div class="project-title d-flex align-items-center">
+												<div class="item_details list-font">
+													<div><strong>Check in :</strong> {{guest.checkin | date:'MMMM d, y'}}</div>
+													<div><strong>Check out :</strong> {{guest.checkout | date:'MMMM d, y'}}</div>
+													<div><strong>Address:</strong> {{guest.address}}</div>
+												</div>
+											</div>
+											<div class="actions">
+											
+													
+												 <button ng-click="editguestRegistration(index)" data-toggle="modal" data-target="#myguestModal" type="button" class="btn-link"><i class="fa fa-pencil"></i></button>
+												 <button ng-click="deleteRegistration(index)" type="button" class="btn-link"><i class="fa fa-trash"></i></button>
+										
+											
+											</div>
+											
+										  </div>
+									</div>
+								</div>
+						</div>
+						</div>
+					</div>
+                </div>
+				</div>
+			
+			</div>
+		</div>
+   </div>
+   
+   	<!-- Modal-->
+	<div class="card-body text-center modalclass">
+	  <div id="myguestModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+		<div role="document" class="modal-dialog" ng-click="modal_response = ''">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <label class="form-header-text">Enter Details</label>
+			  <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+			</div>
+			<div class="modal-body">
+			  <form>
+			  
+				<div class="form-group">       
+					<select class="form-control select-class" id="placetype" ng-model="newguest.roomno" ng-options="item.id as item.id for item in availablerooms | filter:checkAvalibility(newguest.roomtype,newguest.roomclass,newguest.checkin,newguest.checkout)">
+						<option value="" disabled>Room ID</option>
+					</select>
+				</div>
+				<div class="form-group">       
+					<input id="inlineFormInput" type="text" placeholder="Guest Name" class="mx-sm-6 form-control" ng-model="newguest.name">		  
+				</div>
+				<div class="form-group">       
+					<input id="inlineFormInput" type="text" placeholder="Email" class="mx-sm-6 form-control" ng-model="newguest.email">
+				</div>
+				<div class="form-group">       
+					<input id="inlineFormInputGroup" type="number" placeholder="Contact" class="mx-sm-6 form-control form-control" ng-model="newguest.contact">
+				</div>
+				<div class="form-group">       
+					<textarea class="form-control" placeholder="Address here..." ng-model="newguest.address" rows="2" id="address"></textarea>
+				</div>     
+				<div class="form-group"> 				
+					 <input id="inlineFormInput" type="number" placeholder="No of adults" class="mx-sm-6 form-control" ng-model="newguest.adults">
+				</div>
+				<div class="form-group">
+					<input id="inlineFormInput" type="number" placeholder="No of childrens" class="mx-sm-6 form-control" ng-model="newguest.childrens">					
+				</div>
+				<div class="form-group"> 
+					<input id="inlineFormInputGroup" type="number" placeholder="No of nights" class="mx-sm-6 form-control form-control" ng-model="newguest.nights">				
+				</div>
+				<div class="form-group"> 
+					<select class="col-lg-5 form-control select-class" id="placetype" ng-model="newguest.roomclass" ng-options="item.class as item.class for item in availablerooms | unique:'class' | filter:checkAvalibility(newguest.roomtype,newguest.roomclass,newguest.checkin,newguest.checkout)">
+						<option value="" disabled>Class</option>
+					</select>
+				</div>			
+				<div class="form-group"> 
+					<select style="margin-left:5px;"class="col-lg-4 form-control select-class" id="placetype" ng-model="newguest.roomtype" ng-options="item.type as item.type for item in availablerooms | unique:'type' | filter:checkAvalibility(newguest.roomtype,newguest.roomclass,newguest.checkin,newguest.checkout)">
+								<option value="" disabled>Type</option>
+					</select>
+				</div>
+				<div class="form-group"> 
+					<datepicker date-format="MMM d, y">
+						<input class="mx-sm-6 form-control" ng-model="newguest.checkout" placeholder=" Checkin date" type="text"/>
+					</datepicker>
+				</div>
+				<div class="form-group"> 
+					<datepicker date-format="MMM d, y">
+						 <input class="mx-sm-6 form-control" ng-model="newguest.checkout" placeholder=" Checkout date" type="text"/>
+					</datepicker>
+				</div>
+				<div class="modal-footer">
+				  <button type="button" data-dismiss="modal" class="btn btn-secondary"><i class="fa fa-close"> Close</i></button>
+				  <button type="button" class="btn btn-success" ng-click="updateRegistration(newguest,newGuestIndex)"><i class="fa fa-check"> Save changes</i></button>
+				</div>
+			  </form>
+			</div>
+			
+		  </div>
+		</div>
+	  </div>
+	</div>
+</div>

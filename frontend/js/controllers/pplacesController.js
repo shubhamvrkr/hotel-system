@@ -1,68 +1,175 @@
-tabletTab.controller('roomController', ['$scope', '$rootScope','$http','$cookieStore','$location',
-    function ($scope, $rootScope,$http,$cookieStore,$location) {
+tabletTab.controller('pplacesController', ['$scope', '$rootScope','$http','$cookieStore','$location','$timeout','Upload',
+    function ($scope, $rootScope,$http,$cookieStore,$location,$timeout,Upload) {
     	 
-	console.log("roomcontroller");
+	//console.log(google.maps)
+	console.log("pplacescontroller");
+	console.log($scope)
 	var token = $cookieStore.get('token')
 	if(token==null){
 		$location.path("\homepage")
 	}
-	$scope.room={};
-	$scope.addroom_response = '';
-	$scope.registeredRoom=[]
-	//console.log($scope.registeredStaff.length)
-	fetchRegisteredRoom();
-	$scope.addRoom = function(room){
+	$scope.registeredPlaces=[];
+	$scope.place = {};
+	$scope.place.img = [];
+	$scope.imgurls="";
+	$scope.files=[];
+	$scope.placetypes = ["BEACH","TEMPLE","CHURCH","MOSQUE","FORT","WATERFALL","PARK","SANTUARY","MUSEUM","LAKE","OTHER"];
+
+	fetchRegisteredPlaces();
+	
+	$scope.addPlace = function(place){
 		
-			room.type = room.type.toUpperCase()
-			var header = getHeader();
+			if($scope.chosenPlaceDetails){
+				place.latitude = $scope.chosenPlaceDetails.geometry.location.lat();
+				place.longitude = $scope.chosenPlaceDetails.geometry.location.lng();
+			}
 			
-			$http.post(APIURL+'/room',{room:room},{headers:header}).then((response)=>{
+			place.type = place.type.toUpperCase();
+			var header = getHeader();
+			console.log(place)
+			$http.post(APIURL+'/place',{place:place},{headers:header}).then((response)=>{
 	
 			
-				$scope.addroom_response= response.data;
-				$scope.registeredRoom.push(room)
+				$scope.place_response= response.data;
+				$scope.registeredPlaces.push(place)
 				$scope.clear()
 			 
 			},(err)=>{
 			 
-				$scope.addroom_response= err.data;
+				$scope.place_response= err.data;
 				
 			});
-			
+		
 		
 		
 	}
+	
 	$scope.clear = function(){
 		
-		$scope.room={};
+		$scope.place = {};
+		$scope.place.img = [];
+		$scope.files=[];
+		$scope.imgurls="";
+		$scope.place.type = $scope.placetypes[0];
+		$scope.selectfile_response = ""
 	}
 	
 	$scope.clearResponse = function(){
 		
-		$scope.addroom_response = '';
+		$scope.place_response = '';
 	}
-	$scope.editRoom = function(index){
+	
+	$scope.selectImages = function(){
 		
-		var temproom = $scope.registeredRoom[index]
-		console.log("item fetched: ",temproom)
+		$scope.progress_value = 0;
+		$scope.place.img = [];
+		
+		if($scope.imgurls.length==0 && $scope.files.length ==0){
+			$scope.selectfile_response = "No images provided!!"
+			
+		}else{
+				if($scope.imgurls.length >0){
+					
+					if($scope.imgurls.indexOf("http://") == 0 || $scope.imgurls.indexOf("https://") == 0){
+					
+						var imagesUrls = $scope.imgurls.split(",");
+						
+						for (var i = 0; i < imagesUrls.length; i++) {
+							
+							$scope.place.img.push(imagesUrls[i])
+						}
+						console.log("food_item.img: ",$scope.place.img)
+						
+					}else{
+					
+						$scope.selectfile_response = "Image urls are not valid!!"
+					}
+					
+				}
+				if($scope.files.length >0){
+					
+					$scope.progress_value = 1;
+					$scope.selectfile_response = "Please wait..uploading images to server";
+					
+					var header = getHeader();
+					 Upload.upload({
+								url: APIURL+'/upload', 
+								data:{files:$scope.files},
+								headers:header
+					}).then(function (resp) { 
+					
+							if(resp.status === 200){ //validate success
+								console.log(resp)
+								for(var index=0;index<resp.data.data.length;index++){
+									console.log(resp.data.data[index])
+									$scope.place.img.push(APIURL+'/'+resp.data.data[index])
+								}
+								$scope.progress_value = 0;
+								$scope.selectfile_response = "files uploaded successfully";
+							}
+							
+					}, function (error) { //catch error
+							console.log(error);
+				
+							$scope.progress_value = 0;
+							$scope.selectfile_response = error.data;
+							
+					}, function (evt) { 
+									
+							console.log(evt);
+							$scope.progress_value = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+							console.log('progress: ' + $scope.progress_value + '% ');
+					});
+				
+					
+				}
+		}		
+	}
+
+	$scope.editPlace = function(index){
+		
+		var tempplace = $scope.registeredPlaces[index]
+		console.log("item fetched: ",tempplace)
 		console.log("item index: ",index)
-		$scope.newroom = angular.copy(temproom);
-		console.log("item copied: ",$scope.newroom)
-		$scope.newRoomIndex = index
+		$scope.newplace = angular.copy(tempplace);
+		console.log("item copied: ",$scope.newplace)
+		$scope.newPlaceIndex = index
 		
 	}
 	
-	$scope.updateRoom = function(room,index){
+	$scope.deletePlace = function(index){
+		
+		var id = $scope.registeredPlaces[index].id;
+		var header = getHeader();
+		$http.delete(APIURL+'/place/'+id,{headers:header}).then((response)=>{
+
+		
+			$scope.registeredPlaces.splice(index,1);
+			$scope.clear()
+		 
+		},(err)=>{
+			 
+			console.log(err);
+				
+		});
+		
+	}
+	
+	$scope.updatePlace = function(place,index){
 		
 		console.log("update staff" , index);
-		var oldId = $scope.registeredRoom[index].id
+		if($scope.newchosenPlaceDetails){
+				place.latitude = $scope.newchosenPlaceDetails.geometry.location.lat();
+				place.longitude = $scope.newchosenPlaceDetails.geometry.location.lng();
+		}
+		var oldId = $scope.registeredPlaces[index].id
 		var header = getHeader();
-		room.type = room.type.toUpperCase();
-		$http.put(APIURL+'/room',{id:oldId,room:room},{headers:header}).then((response)=>{
+		place.type = place.type.toUpperCase();
+		$http.put(APIURL+'/place',{id:oldId,place:place},{headers:header}).then((response)=>{
 
 			
 			$scope.modal_response= response.data;
-			$scope.registeredRoom[index] = room;
+			$scope.registeredPlaces[index] = place;
 			$scope.clear()
 		 
 		},(err)=>{
@@ -72,14 +179,19 @@ tabletTab.controller('roomController', ['$scope', '$rootScope','$http','$cookieS
 		});
 		
 	}
-	function fetchRegisteredRoom(){
+	
+	$scope.refresh = function(){
+		
+		fetchRegisteredPlaces();
+	}
+
+	function fetchRegisteredPlaces(){
 		
 		var header = getHeader();
-		
-		$http.get(APIURL+'/room',{headers:header}).then((response)=>{
+		$http.get(APIURL+'/place',{headers:header}).then((response)=>{
 	
-				//console.log(response)
-				$scope.registeredRoom =response.data
+				console.log(response)
+				$scope.registeredPlaces =response.data
 				
 			},(err)=>{
 				
@@ -88,6 +200,7 @@ tabletTab.controller('roomController', ['$scope', '$rootScope','$http','$cookieS
 		
 	}
 	
+	
 	function getHeader(){
 		var header = {
 			"Authorization":"JWT "+token
@@ -95,4 +208,5 @@ tabletTab.controller('roomController', ['$scope', '$rootScope','$http','$cookieS
 		return header;
 	}
       
+	 
 }]);

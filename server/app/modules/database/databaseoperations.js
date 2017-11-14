@@ -26,6 +26,18 @@ class DatabaseConnector {
 							if(err){
 								console.log("error: ",err)
 							}
+							db.createCollection("places", function(err, res) {
+								if(err){
+									console.log("error: ",err)
+								}
+								db.createCollection("guests", function(err, res) {
+									if(err){
+										console.log("error: ",err)
+									}
+						
+								});
+					
+							});
 					
 						});
 					
@@ -39,7 +51,7 @@ class DatabaseConnector {
 	getObject(collectionname,obj,callback){
 		
 		 var collection = this.db.collection(collectionname);
-		 collection.find(obj, {$exists: true}).toArray(function(err, doc){   
+		 collection.find(obj).toArray(function(err, doc){   
 			if(doc.length>0) 
 			{
 				callback(doc)
@@ -47,6 +59,46 @@ class DatabaseConnector {
 			else{
 				callback(null)
 			}
+		});
+		
+	}
+	
+	getObjectSummary(collectionname,joincollectionName,obj,fields,callback){
+		
+		var collection = this.db.collection(collectionname);
+		var agg_arr = [];
+		var lookup = { $lookup:
+						   {
+							 from: joincollectionName,
+							 localField: obj.localfield,
+							 foreignField: obj.foreignfield,
+							 as: obj.as
+						   }
+					}
+		agg_arr.push(lookup)
+	
+		var project = {};
+		project.$project = {}
+		project.$project["_id"]=0
+		project.$project[obj.localfield]=1
+		for(var i in fields){
+			console.log(i)
+			project.$project[fields[i]]=1
+		}
+		project.$project[obj.as] = { 
+									  $filter: 
+									  { 
+										input: "$"+obj.as, 
+										as:'temp', 
+										cond: { $gte: [ "$$temp."+obj.conditionfield, obj.conditionvalue ] } 
+									  } 
+								}
+		agg_arr.push(project)
+		
+		collection.aggregate(agg_arr, function(err, res) {
+			
+			callback(err,res)
+			
 		});
 		
 	}
@@ -100,5 +152,20 @@ class DatabaseConnector {
 		});
 		
 	}
+
+	getObjectOnCondition(collectionname,obj,condition,callback){
+		
+			var collection = this.db.collection(collectionname)
+			collection.find(obj,condition).toArray(function(err, result) {
+				if (err){
+					callback(err,null)
+				}else{
+					callback(null,result)
+				}
+			});
+			
+		
+	}
+	
 }
 module.exports = DatabaseConnector;

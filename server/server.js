@@ -28,24 +28,16 @@ var restrictedURLs = ["/staff"]
 
 var strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
   
-  console.log('payload received', jwt_payload.id);
-  var user = null;
-  if(jwt_payload.id=="super-admin"){
-	  
+	console.log('payload received', jwt_payload.id);
+
 	 user = {
 		 "id":jwt_payload.id,
 		 "role":jwt_payload.role
 	 }
-  }
-  if (user) {
-	
+
     next(null, user);
 	
-  } else {
-	  
-    next(null, false);
-	
-  }
+  
 });
 
 
@@ -68,14 +60,14 @@ authorization = function(req, res, next){
 		
 	}else{
 		
-		if(isRestrictedUrls(req.url)){
+		//if(isRestrictedUrls(req.url)){
 			
-			res.status(400).json("Authorization failure!!");
+		//	res.status(400).json("Authorization failure!!");
 			
-		}else{
+		//}else{
 			
 			next(null, req.user);
-		}
+		//}
 	}
 }
 

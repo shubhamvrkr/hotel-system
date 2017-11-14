@@ -1,16 +1,21 @@
 tabletTab.controller('dashboardController', ['$scope', '$rootScope','$http','$cookieStore','$location',
     function ($scope, $rootScope,$http,$cookieStore,$location) {
   
-	$scope.user = $cookieStore.get('user');
-	console.log($scope.user)
+	
 	var token = $cookieStore.get('token')
-	console.log(token)
 	if(token==null){
 		$location.path("\homepage")
 	}
+	$scope.user = $cookieStore.get('user');
+	if($scope.user){
+		var url= $scope.user.role=="SUPERADMIN"?'/partials/staff.html':'/partials/home.html';
+		var title= $scope.user.role=="SUPERADMIN"?'Hotel Staff':'Dashboard';
+	}
+	console.log("token: ",token)
+	
 	$scope.view ={
-		"url":"/partials/home.html",
-		"title":"Dashboard"
+		"url":url,
+		"title":title
 	}
 	$scope.setView= function(name,title){
 

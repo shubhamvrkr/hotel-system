@@ -7,6 +7,7 @@ tabletTab.controller('roomController', ['$scope', '$rootScope','$http','$cookieS
 		$location.path("\homepage")
 	}
 	$scope.room={};
+	$scope.roomclasses=["AC","NON-AC"]
 	$scope.addroom_response = '';
 	$scope.registeredRoom=[]
 	//console.log($scope.registeredStaff.length)
@@ -14,6 +15,7 @@ tabletTab.controller('roomController', ['$scope', '$rootScope','$http','$cookieS
 	$scope.addRoom = function(room){
 		
 			room.type = room.type.toUpperCase()
+			room.class = room.class.toUpperCase()
 			var header = getHeader();
 			
 			$http.post(APIURL+'/room',{room:room},{headers:header}).then((response)=>{
@@ -58,6 +60,7 @@ tabletTab.controller('roomController', ['$scope', '$rootScope','$http','$cookieS
 		var oldId = $scope.registeredRoom[index].id
 		var header = getHeader();
 		room.type = room.type.toUpperCase();
+		room.class = room.class.toUpperCase();
 		$http.put(APIURL+'/room',{id:oldId,room:room},{headers:header}).then((response)=>{
 
 			
@@ -104,6 +107,7 @@ tabletTab.controller('roomController', ['$scope', '$rootScope','$http','$cookieS
 	
 				//console.log(response)
 				$scope.registeredRoom =response.data
+				console.log(response.data)
 				
 			},(err)=>{
 				

@@ -1,4 +1,4 @@
-tabletTab = angular.module('TabletTab', ['ngRoute','ngCookies','ngFileUpload']);
+tabletTab = angular.module('TabletTab', ['ngRoute','ngCookies','ngFileUpload','720kb.datepicker','angular.filter']);
 
 tabletTab.config(function ($routeProvider) {
 

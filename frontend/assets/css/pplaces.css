@@ -19,3 +19,28 @@
 	z-index:10000;
 	position: absolute;
 }
+
+.place-img{
+	width:220px;
+	height:200px;
+	
+}
+.row-img{
+	
+	height:100%;
+	width:100%;
+	
+}
+.select-class{
+	
+	margin-top:10px;
+}
+.item_details{
+	color:#686a76;
+	padding:5px;
+	font-size:1em;
+}
+.right-project{
+	width:90%;
+	height:100%;
+}

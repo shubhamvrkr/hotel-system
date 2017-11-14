@@ -10,7 +10,7 @@ tabletTab.controller('homepageController', ['$scope', '$rootScope','$http','$coo
 				
 				$cookieStore.put('token', response.data.data.token);
 				$cookieStore.put('user', response.data.data.user);
-				console.log(response.data.data.user);
+				//console.log(response.data.data.user);
 				$location.path("/dashboard");
 				
 	

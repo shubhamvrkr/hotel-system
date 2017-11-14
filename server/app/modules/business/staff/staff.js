@@ -23,7 +23,7 @@ class Staff {
 		
 		self.database.getObject(self.collectionName,{id:id},function(staffUser){
 			
-		
+			console.log('staffuser: ',staffUser)
 			if(staffUser!=null){
 			
 				res.status(409).json("Staff member with same id already exists!!");
@@ -63,6 +63,7 @@ class Staff {
 		}
 		self.database.getObjects(self.collectionName,fields,function(err,results){
 			
+				console.log("result: ",results)
 				if(err){
 					console.log(err);
 					res.status(500).json("Server error!! please try after some time");

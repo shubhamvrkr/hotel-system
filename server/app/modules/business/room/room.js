@@ -13,6 +13,7 @@ class Room {
 		var id = req.body.room.id;
 		var type = req.body.room.type;
 		var tabid = req.body.room.tabid;
+		var class1 = req.body.room.class;
 		
 		self.database.getObject(self.collectionName,{id:id},function(room){
 			
@@ -26,6 +27,7 @@ class Room {
 				var roomObj = {
 					"id":id,
 					"type":type,
+					"class":class1,
 					"tabid":tabid
 				}
 				self.database.saveObject(self.collectionName,roomObj,function(message,status){
@@ -52,6 +54,7 @@ class Room {
 		}
 		self.database.getObjects(self.collectionName,fields,function(err,results){
 			
+				console.log("result: ",results)
 				if(err){
 					console.log(err);
 					res.status(500).json("Server error!! please try after some time");
@@ -60,6 +63,31 @@ class Room {
 				}
 		})
 	}
+	
+	getRoomSummary(req, res, next){
+		
+		var self = this;
+		
+		var obj ={
+			localfield:"id",
+			foreignfield:"roomno",
+			as:"output",
+			conditionfield:"checkout",
+			conditionvalue:new Date().getTime()
+		}
+		var fields = ["type","class"]
+		self.database.getObjectSummary(self.collectionName,'guests',obj,fields,function(err,results){
+			
+			if(err){
+					console.log(err);
+					res.status(500).json("Server error!! please try after some time");
+				}else{
+					res.status(200).json(results);
+			}	
+		});
+		
+	}
+	
 	updateRoom(req, res, next){
 	
 

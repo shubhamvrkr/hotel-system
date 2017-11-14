@@ -84,25 +84,35 @@
             <div class="avatar"><img src="assets/img/default.png" alt="..." class="img-logo rounded-circle img-responsive">
 			</div>
             <div class="title">
-              <h1 class="h4">{{user.firstname+' '+user.lastname}}</h1>
+              <h4>{{(user.firstname+' '+user.lastname).length>11?user.firstname:user.firstname+' '+user.lastname}}</h4>
               <p >{{user.role}}</p>
             </div>
           </div>
           <!-- Sidebar Navidation Menus-->
 		 <div>
 			  <ul class="list-unstyled">
-				<span class="heading">Main</span>
-				<li ng-class="view.title=='Dashboard'?'active':''"> <a href="" ng-click="setView('home.html','Dashboard')"><i class="icon-home"></i>Dashboard</a></li>
+				<div ng-show="user.role!='SUPERADMIN'">
+					<span class="heading">Main</span>
+					<li ng-class="view.title=='Dashboard'?'active':''"> <a href="" ng-click="setView('home.html','Dashboard')"><i class="icon-home"></i>Dashboard</a></li>
+				</div>
+				<div ng-show="user.role=='SUPERADMIN'|| user.role=='ADMIN'">
+					<span class="heading">Hotel Profile</span>
+					<li ng-class="view.title=='Hotel Staff'?'active':''"><a href="" ng-click="setView('staff.html','Hotel Staff')"> <i class="icon-user"></i>Staff</a></li>
+					<li  ng-class="view.title=='Hotel Rooms'?'active':''"><a href="" ng-click="setView('room.html','Hotel Rooms');"> <i class="fa fa-bed"></i>Rooms</a></li>
 				
-				<span class="heading">Hotel Profile</span>
-				<li  ng-class="view.title=='Hotel Staff'?'active':''"><a href="" ng-click="setView('staff.html','Hotel Staff')"> <i class="icon-user"></i>Staff</a></li>
-				<li  ng-class="view.title=='Hotel Rooms'?'active':''"><a href="" ng-click="setView('room.html','Hotel Rooms');"> <i class="fa fa-bed"></i>Rooms</a></li>
-			
-				<span class="heading">Kitchen Profile</span>
-				<li ng-class="view.title=='eMenu'?'active':''"> <a href="" ng-click="setView('emenu.html','eMenu');"><i class="fa fa-cutlery"></i>eMenu </a></li>
-				<span class="heading">Places to visit</span>
-				<li ng-class="view.title=='Popular Places'?'active':''"> <a href="" ng-click="setView('pplaces.html','Popular Places');"><i class="icon-page"></i>Popular Places </a></li>
-			  </ul>
+					<span class="heading">Kitchen Profile</span>
+					<li ng-class="view.title=='eMenu'?'active':''"> <a href="" ng-click="setView('emenu.html','eMenu');"><i class="fa fa-cutlery"></i>eMenu </a></li>
+					<span class="heading">Places to visit</span>
+					<li ng-class="view.title=='Popular Places'?'active':''"> <a href="" ng-click="setView('pplaces.html','Popular Places');"><i class="icon-page"></i>Popular Places </a></li>
+				</div>
+				<div ng-show="user.role=='RECEPTIONIST'">
+					<span class="heading">Room Operations</span>
+					<li ng-class="view.title=='Room Booking'?'active':''"><a href="" ng-click="setView('roombooking.html','Room Booking')"> <i class="fa fa-address-book-o"></i>Registration / Booking</a></li>
+					<li ng-class="view.title=='Rooms Summary'?'active':''"><a href="" ng-click="setView('roomsummary.html','Rooms Summary');"> <i class="fa fa-info-circle"></i>Rooms Summary</a></li>
+				
+				</div>
+				
+			 </ul>
 		  <div>
         </nav>
         <div class="content-inner">

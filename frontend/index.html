@@ -22,6 +22,7 @@
     <!-- Font Icons CSS-->
     <link rel="stylesheet" href="https://file.myfontastic.com/da58YPMQ7U5HY8Rb6UxkNf/icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="assets/css/angular-datepicker.css" rel="stylesheet" type="text/css" />
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
@@ -31,12 +32,15 @@
     <script src="assets/js/jquery.validate.min.js"></script>
     <script src="assets/js/front.js"></script>
 	
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-cookies.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.17/angular-filter.min.js"></script>
 	<script src="/assets/js/ng-file-upload-shim.min.js"></script>
 	<script src="/assets/js/ng-file-upload.min.js"></script>
     <script src="/assets/js/angular-route.js"></script>
     <script src="/assets/js/angular-animate.js"></script>
+	<script src="/assets/js/angular-datepicker.js"></script>
 
 	
 	
@@ -47,8 +51,14 @@
 	<script src="/js/controllers/staffController.js"></script>
 	<script src="/js/controllers/roomController.js"></script>
 	<script src="/js/controllers/emenuController.js"></script>
+	<script src="/js/controllers/pplacesController.js"></script>
+	<script src="/js/controllers/roombookingController.js"></script>
 	
 	<script src="/js/directives/fileupload.js"></script>
+	<script src="/js/directives/googlelocation.js"></script>
+	
+	<script src="/js/filter/unique.js"></script>
+	
 	
 	<script>
 			var APIURL="http://localhost:9091"

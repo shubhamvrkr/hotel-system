@@ -26,6 +26,7 @@ module.exports = function (app) {
 	var roomOperation = new Room(database)
 	app.post('/room', passport.authenticate('jwt', { session: false }),authorization,roomOperation.addRoom.bind(roomOperation));
 	app.get('/room', passport.authenticate('jwt', { session: false }),authorization,roomOperation.getRoom.bind(roomOperation));
+	app.get('/room/summary', passport.authenticate('jwt', { session: false }),authorization,roomOperation.getRoomSummary.bind(roomOperation));
 	app.put('/room', passport.authenticate('jwt', { session: false }),authorization,roomOperation.updateRoom.bind(roomOperation));
 	app.delete('/room/:id', passport.authenticate('jwt', { session: false }),authorization,roomOperation.deleteRoom.bind(roomOperation));
 	
@@ -41,4 +42,25 @@ module.exports = function (app) {
 	app.get('/emenu', passport.authenticate('jwt', { session: false }),authorization,eMenuOperation.geteMenu.bind(eMenuOperation));
 	app.put('/emenu', passport.authenticate('jwt', { session: false }),authorization,eMenuOperation.updateeMenu.bind(eMenuOperation));
 	app.delete('/emenu/:id', passport.authenticate('jwt', { session: false }),authorization,eMenuOperation.deleteeMenu.bind(eMenuOperation));
+	
+	var Places = require('./modules/business/places/places.js');
+	var placesOperation = new Places(database)
+	app.post('/place', passport.authenticate('jwt', { session: false }),authorization,placesOperation.addPlace.bind(placesOperation));
+	app.get('/place', passport.authenticate('jwt', { session: false }),authorization,placesOperation.getPlace.bind(placesOperation));
+	app.put('/place', passport.authenticate('jwt', { session: false }),authorization,placesOperation.updatePlace.bind(placesOperation));
+	app.delete('/place/:id', passport.authenticate('jwt', { session: false }),authorization,placesOperation.deletePlace.bind(placesOperation));
+
+	
+	
+	var Guest = require('./modules/business/guest/guest.js');
+	var guestOperation = new Guest(database)
+	app.post('/guests', passport.authenticate('jwt', { session: false }),authorization,guestOperation.registerGuest.bind(guestOperation));
+	app.get('/guests', passport.authenticate('jwt', { session: false }),authorization,guestOperation.getGuests.bind(guestOperation));
+	app.put('/guests', passport.authenticate('jwt', { session: false }),authorization,guestOperation.updateGuest.bind(guestOperation));
+	app.delete('/guests/:id', passport.authenticate('jwt', { session: false }),authorization,guestOperation.deleteGuest.bind(guestOperation));
+
+	
+	
+	
+	
 };
